@@ -1,12 +1,21 @@
 @font-face {
   font-family: 'TradeGothic LT';
-  src: url('public/assets/fonts/TradeGothicLT-Bold.woff2') format('woff2'),
-    url('public/assets/fonts/TradeGothicLT-Bold.woff') format('woff');
+  src: url('/public/assets/fonts/TradeGothicLT-Bold.woff2') format('woff2'),
+    url('/public/assets/fonts/TradeGothicLT-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
 
 html {
-  cursor: url(/public/assets/images/cursor-heart.png), default;
+  cursor: url('/public/assets/images/cursor-heart.png'), default;
+}
+
+body {
+  background-image: url('/public/assets/images/bg1.png');
+  background-size: cover;
+}
+
+main {
+  height: 100vh;
 }
