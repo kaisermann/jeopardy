@@ -5,6 +5,7 @@
   let video;
   let canvas;
 
+  let isActive = false;
   let isStreamingVideo = false;
   let isDisplayingVideo = false;
 
@@ -12,15 +13,21 @@
   let bodyPixNet;
   let animationFrame = null;
 
+  $: loading = isActive && (!isStreamingVideo || !isDisplayingVideo);
+
   let canvasContext;
 
   $: if (canvas) {
-    canvas.width = 1920
-    canvas.height = 1080
+    canvas.width = 1920;
+    canvas.height = 1080;
     canvasContext = canvas.getContext('2d');
     canvasContext.imageSmoothingEnabled = true;
   } else {
     canvasContext = undefined;
+  }
+
+  $: if (isStreamingVideo) {
+    loadBodyPix().then(drawVideo);
   }
 
   async function loadBodyPix() {
@@ -75,28 +82,21 @@
     isDisplayingVideo = false;
   }
 
-  function handleClick() {
-    if (stream == null) {
-      initStream();
-    } else {
-      destroyStream();
-    }
-  }
-
   function detectPerson() {
     return bodyPixNet
       .segmentPerson(video, {
         flipHorizontal: false,
-        internalResolution: 'high',
+        internalResolution: 'medium',
         segmentationThreshold: 0.6,
       })
       .catch((error) => console.log(error));
   }
 
   function drawPersonSegmentation(segmentation, auxCanvas) {
-    const tempCtx = auxCanvas.getContext('2d');
+    const auxCtx = auxCanvas.getContext('2d');
     const mask = bodyPix.toMask(segmentation);
-    tempCtx.putImageData(mask, 0, 0);
+
+    auxCtx.putImageData(mask, 0, 0);
 
     // draw original image
     canvasContext.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -104,12 +104,13 @@
     // use destination-out, then only masked area will be removed
     canvasContext.save();
     canvasContext.globalCompositeOperation = 'destination-out';
+    canvasContext.filter = 'blur(8px)';
     canvasContext.drawImage(auxCanvas, 0, 0, canvas.width, canvas.height);
     canvasContext.restore();
   }
 
   async function drawVideo() {
-    const tempCanvas = document.createElement('canvas');
+    const auxCanvas = document.createElement('canvas');
 
     async function loop() {
       if (!isStreamingVideo) {
@@ -119,12 +120,12 @@
         return;
       }
 
-      tempCanvas.width = video.videoWidth;
-      tempCanvas.height = video.videoHeight;
+      auxCanvas.width = video.videoWidth;
+      auxCanvas.height = video.videoHeight;
 
       animationFrame = requestAnimationFrame(loop);
 
-      drawPersonSegmentation(await detectPerson(), tempCanvas);
+      drawPersonSegmentation(await detectPerson(), auxCanvas);
 
       if (isStreamingVideo) {
         isDisplayingVideo = true;
@@ -134,21 +135,36 @@
     animationFrame = requestAnimationFrame(loop);
   }
 
-  $: if (isStreamingVideo) {
-    loadBodyPix().then(drawVideo);
+  function handleClick() {
+    if (!isActive) {
+      initStream();
+    } else {
+      destroyStream();
+    }
+
+    isActive = !isActive;
   }
 
   onDestroy(destroyStream);
 </script>
 
 <!-- eslint-disable-next-line a11y-media-has-caption -->
-<canvas
-  bind:this={canvas}
-  class:ready={isDisplayingVideo}
-  on:click={handleClick}
-/>
+<div class="video-wrapper" class:loading>
+  <canvas
+    bind:this={canvas}
+    class:ready={isDisplayingVideo}
+    on:click={handleClick}
+  />
+</div>
 
 <style>
+  .video-wrapper {
+    transition: filter 0.5s ease;
+  }
+
+  .loading {
+    filter: brightness(0.4);
+  }
   canvas {
     object-fit: cover;
     width: 100%;
@@ -160,7 +176,7 @@
     background-image: url(/public/assets/images/amy.jpg);
     background-size: cover;
     background-repeat: no-repeat;
-    cursor: url(/public/assets/images/cursor-camera.png), default !important;
+    cursor: url(/public/assets/images/cursor-camera.png) 16 16, default !important;
   }
 
   canvas.ready {

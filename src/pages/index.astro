@@ -1,6 +1,7 @@
 ---
-import Name from '../components/Name.astro';
+import Name from '../components/Name.svelte';
 import Webcam from '../components/Webcam.svelte';
+import MusicButton from '../components/MusicButton.svelte';
 
 let title = 'J E O P A R D I F Y';
 ---
@@ -18,22 +19,56 @@ let title = 'J E O P A R D I F Y';
 	</style>
 
 	<style>
-
     .video-container {
       padding: 40px 80px 40px;
       margin: 0 auto;
       max-width: 66%;
     }
+
+    .name-container {
+      text-align: center;
+      width: 50%;
+      margin: 0 auto;
+    }
+
+    .music-button-container {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+    }
+
+    @media(max-width: 768px) {
+      main {
+        display: grid;
+        place-items: center;
+      }
+
+      .video-container {
+        padding: 40px;
+        max-width: 100%;
+      }
+
+      .name-container{
+        width: 76%;
+      }
+    }
 	</style>
 </head>
 <body>
 	<main>
-    <div class="video-container">
-		  <Webcam client:load />
+    <div>
+      <div class="video-container">
+        <Webcam client:load />
+      </div>
+
+      <div class="name-container">
+        <Name client:load/>
+      </div>
+
+      <div class="music-button-container">
+        <MusicButton client:load />
+      </div>
     </div>
-
-    <Name />
-
 	</main>
 </body>
 </html>

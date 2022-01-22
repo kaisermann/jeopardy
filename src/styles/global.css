@@ -8,7 +8,7 @@
 }
 
 html {
-  cursor: url('/public/assets/images/cursor-heart.png'), default;
+  cursor: url('/public/assets/images/cursor-heart.png') 16 14, default;
 }
 
 body {
