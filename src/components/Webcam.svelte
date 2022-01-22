@@ -15,6 +15,8 @@
   let canvasContext;
 
   $: if (canvas) {
+    canvas.width = 1920
+    canvas.height = 1080
     canvasContext = canvas.getContext('2d');
     canvasContext.imageSmoothingEnabled = true;
   } else {
@@ -85,8 +87,8 @@
     return bodyPixNet
       .segmentPerson(video, {
         flipHorizontal: false,
-        internalResolution: 'medium',
-        segmentationThreshold: 0.5,
+        internalResolution: 'high',
+        segmentationThreshold: 0.6,
       })
       .catch((error) => console.log(error));
   }
