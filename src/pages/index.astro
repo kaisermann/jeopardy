@@ -1,0 +1,55 @@
+---
+// Component Imports
+import Name from '../components/Name.astro';
+import Webcam from '../components/Webcam.svelte';
+/* ASTRO:COMPONENT_IMPORTS */
+
+// Component Script:
+// You can write any JavaScript/TypeScript that you'd like here.
+// It will run during the build, but never in the browser.
+// All variables are available to use in the HTML template below.
+let title = 'My Astro Site';
+
+// Full Astro Component Syntax:
+// https://docs.astro.build/core-concepts/astro-components/
+---
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>{title}</title>
+
+	<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+	<style global>
+		@import "../styles/reset.css";
+		@import "../styles/global.css";
+	</style>
+
+	<style>
+    main {
+      height: 100vh;
+    }
+
+    body {
+      background-image: url(/public/assets/images/bg1.png);
+      background-size: cover;
+    }
+
+    .video {
+      padding: 40px 80px 40px;
+      margin: 0 auto;
+      max-width: 66%;
+    }
+	</style>
+</head>
+<body>
+	<main>
+    <div class="video">
+		  <Webcam client:load />
+    </div>
+
+    <Name />
+
+	</main>
+</body>
+</html>
