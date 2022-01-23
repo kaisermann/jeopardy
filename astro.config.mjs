@@ -14,6 +14,9 @@ export default /** @type {import('astro').AstroUserConfig} */ ({
   buildOptions: {
     site: 'https://jeopardify.netlify.app',
   },
+  devOptions: {
+    hostname: '0.0.0.0',
+  },
   vite: {
     plugins: [minifyHtml()],
   },

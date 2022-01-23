@@ -200,7 +200,7 @@
     width: 100%;
     height: 100%;
     aspect-ratio: 16 / 9;
-    aspect-ratio: var(--screen-ratio);
+    /* aspect-ratio: var(--screen-ratio); */
     background-color: transparent;
     background-image: url(/public/assets/images/amy.jpg);
     background-size: cover;
@@ -219,7 +219,7 @@
     background-image: url(/public/assets/images/bg-video.jpg);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 901px) {
     canvas {
       max-height: 50vh;
     }

@@ -1,6 +1,6 @@
 <script>
   let input;
-  let name = 'Amy Schnieder';
+  let name = 'Amy Schneider';
 
   function handleFocus() {
     requestAnimationFrame(() => input.setSelectionRange(-1, -1));
@@ -35,7 +35,7 @@
   input {
     width: 100%;
     display: inline-block;
-    padding: 16px 24px;
+    padding: 4px 24px;
     overflow: hidden;
     text-align: center;
     font-family: 'TradeGothic LT';
@@ -56,5 +56,13 @@
 
   input:focus {
     outline: none;
+  }
+
+  @media (max-width: 901px) {
+    input {
+      border-width: 3px;
+      padding: 4px 16px;
+      font-size: 6vw;
+    }
   }
 </style>
