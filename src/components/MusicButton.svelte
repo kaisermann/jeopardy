@@ -1,4 +1,6 @@
 <script>
+  import src from '/public/assets/thinkMusic.mp3';
+
   let audio;
   let paused = true;
 
@@ -9,7 +11,7 @@
   <button on:click={() => (paused ? audio.play() : audio.pause())}>♫</button>
 </div>
 
-<audio bind:paused bind:this={audio} src="/public/assets/thinkMusic.mp3" loop />
+<audio bind:paused bind:this={audio} {src} loop />
 
 <style>
   audio {
@@ -27,7 +29,7 @@
     color: white;
     text-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
     cursor: url(/public/assets/images/cursor-music.png) 16 17, default !important;
-    transition: transform 0.3s linear;
+    transition: transform 0.2s ease;
     transform: scale(1);
   }
 

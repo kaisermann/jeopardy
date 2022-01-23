@@ -1,9 +1,13 @@
 <script>
   import { onDestroy } from 'svelte';
 
+  const CANVAS_RESOLUTION_WIDTH = 1920;
+  const CANVAS_RESOLUTION_HEIGHT = 1080;
+
   let stream;
   let video;
   let canvas;
+  let canvasContext;
 
   let isActive = false;
   let isStreamingVideo = false;
@@ -13,13 +17,14 @@
   let bodyPixNet;
   let animationFrame = null;
 
+  let shouldDetectPerson = false;
+
   $: loading = isActive && (!isStreamingVideo || !isDisplayingVideo);
 
-  let canvasContext;
-
   $: if (canvas) {
-    canvas.width = 1920;
-    canvas.height = 1080;
+    canvas.width = CANVAS_RESOLUTION_WIDTH;
+    canvas.height = CANVAS_RESOLUTION_HEIGHT;
+
     canvasContext = canvas.getContext('2d');
     canvasContext.imageSmoothingEnabled = true;
   } else {
@@ -27,7 +32,11 @@
   }
 
   $: if (isStreamingVideo) {
-    loadBodyPix().then(drawVideo);
+    if (shouldDetectPerson) {
+      loadBodyPix().then(drawVideo);
+    } else {
+      drawVideo();
+    }
   }
 
   async function loadBodyPix() {
@@ -54,7 +63,11 @@
 
     stream = await window.navigator.mediaDevices
       .getUserMedia({
-        video: { width: { ideal: 4096 }, height: { ideal: 2160 } },
+        video: {
+          width: { ideal: 4096 },
+          height: { ideal: 2160 },
+          facingMode: 'user',
+        },
       })
       .catch(() => null);
 
@@ -125,7 +138,11 @@
 
       animationFrame = requestAnimationFrame(loop);
 
-      drawPersonSegmentation(await detectPerson(), auxCanvas);
+      if (shouldDetectPerson) {
+        drawPersonSegmentation(await detectPerson(), auxCanvas);
+      } else {
+        canvasContext.drawImage(video, 0, 0, canvas.width, canvas.height);
+      }
 
       if (isStreamingVideo) {
         isDisplayingVideo = true;
@@ -159,12 +176,14 @@
 
 <style>
   .video-wrapper {
-    transition: filter 0.5s ease;
+    transition: filter 0.4s ease;
   }
 
   .loading {
-    filter: brightness(0.4);
+    transition: filter 1s ease;
+    filter: brightness(0.2);
   }
+
   canvas {
     object-fit: cover;
     width: 100%;
@@ -180,6 +199,6 @@
   }
 
   canvas.ready {
-    background-image: url(/public/assets/images/bg-video.png);
+    background-image: url(/public/assets/images/bg-video.jpg);
   }
 </style>

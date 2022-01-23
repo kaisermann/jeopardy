@@ -26,7 +26,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url(/public/assets/images/bg2.png);
+    background-image: url(/public/assets/images/bg2.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     opacity: 0.8;
