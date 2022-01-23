@@ -35,7 +35,7 @@
   input {
     width: 100%;
     display: inline-block;
-    padding: 20px 24px;
+    padding: 16px 24px;
     overflow: hidden;
     text-align: center;
     font-family: 'TradeGothic LT';

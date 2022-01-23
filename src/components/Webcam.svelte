@@ -1,8 +1,7 @@
 <script>
-  import { onDestroy } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
-  const CANVAS_RESOLUTION_WIDTH = 1920;
-  const CANVAS_RESOLUTION_HEIGHT = 1080;
+  let screenRatio = 16 / 9;
 
   let stream;
   let video;
@@ -22,9 +21,6 @@
   $: loading = isActive && (!isStreamingVideo || !isDisplayingVideo);
 
   $: if (canvas) {
-    canvas.width = CANVAS_RESOLUTION_WIDTH;
-    canvas.height = CANVAS_RESOLUTION_HEIGHT;
-
     canvasContext = canvas.getContext('2d');
     canvasContext.imageSmoothingEnabled = true;
   } else {
@@ -32,12 +28,29 @@
   }
 
   $: if (isStreamingVideo) {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
     if (shouldDetectPerson) {
       loadBodyPix().then(drawVideo);
     } else {
       drawVideo();
     }
   }
+
+  onMount(() => {
+    if (typeof window === 'undefined') return;
+
+    screenRatio = window.screen.availWidth / window.screen.availHeight;
+
+    const observer = new ResizeObserver(() => {
+      screenRatio = window.screen.availWidth / window.screen.availHeight;
+    });
+
+    observer.observe(document.body);
+
+    return () => observer.disconnect();
+  });
 
   async function loadBodyPix() {
     if (bodyPix != null) return;
@@ -77,13 +90,9 @@
 
     video.srcObject = stream;
 
-    video.addEventListener(
-      'playing',
-      () => {
-        isStreamingVideo = true;
-      },
-      { once: true },
-    );
+    video.addEventListener('playing', () => (isStreamingVideo = true), {
+      once: true,
+    });
   }
 
   function destroyStream() {
@@ -126,10 +135,10 @@
     const auxCanvas = document.createElement('canvas');
 
     async function loop() {
+      cancelAnimationFrame(animationFrame);
       if (!isStreamingVideo) {
         isDisplayingVideo = false;
         canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-        cancelAnimationFrame(animationFrame);
         return;
       }
 
@@ -141,10 +150,10 @@
       if (shouldDetectPerson) {
         drawPersonSegmentation(await detectPerson(), auxCanvas);
       } else {
-        canvasContext.save()
+        canvasContext.save();
         canvasContext.scale(-1, 1);
         canvasContext.drawImage(video, 0, 0, -canvas.width, canvas.height);
-        canvasContext.restore()
+        canvasContext.restore();
       }
 
       if (isStreamingVideo) {
@@ -169,39 +178,50 @@
 </script>
 
 <!-- eslint-disable-next-line a11y-media-has-caption -->
-<div class="video-wrapper" class:loading>
+<div class="video-wrapper">
   <canvas
     bind:this={canvas}
     class:ready={isDisplayingVideo}
+    class:loading
     on:click={handleClick}
+    style={`--screen-ratio: ${screenRatio}`}
   />
 </div>
 
 <style>
   .video-wrapper {
-    transition: filter 0.4s ease;
-  }
-
-  .loading {
-    transition: filter 1s ease;
-    filter: brightness(0.2);
+    box-shadow: 0 0 1px 1px #615c64, 0 0 1px 2px #4b4744, 0 0 1px 5px #cec3b5,
+      0 0 0 7px #9c9892;
   }
 
   canvas {
+    display: block;
     object-fit: cover;
     width: 100%;
     height: 100%;
     aspect-ratio: 16 / 9;
-    box-shadow: 0 0 1px 1px #615c64, 0 0 1px 2px #4b4744, 0 0 1px 5px #cec3b5,
-      0 0 0 7px #9c9892;
+    aspect-ratio: var(--screen-ratio);
     background-color: transparent;
     background-image: url(/public/assets/images/amy.jpg);
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: center;
     cursor: url(/public/assets/images/cursor-camera.png) 16 16, default !important;
+    transition: filter 0.4s ease;
+  }
+
+  canvas.loading {
+    transition: filter 1s ease;
+    filter: brightness(0.15);
   }
 
   canvas.ready {
     background-image: url(/public/assets/images/bg-video.jpg);
+  }
+
+  @media (max-width: 768px) {
+    canvas {
+      max-height: 50vh;
+    }
   }
 </style>
