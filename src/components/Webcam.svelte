@@ -141,7 +141,10 @@
       if (shouldDetectPerson) {
         drawPersonSegmentation(await detectPerson(), auxCanvas);
       } else {
-        canvasContext.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvasContext.save()
+        canvasContext.scale(-1, 1);
+        canvasContext.drawImage(video, 0, 0, -canvas.width, canvas.height);
+        canvasContext.restore()
       }
 
       if (isStreamingVideo) {
