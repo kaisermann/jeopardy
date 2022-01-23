@@ -5,6 +5,7 @@
 // VSCode and other TypeScript-enabled text editors will provide auto-completion,
 // helpful tooltips, and warnings if your exported object is invalid.
 // You can disable this by removing "@ts-check" and `@type` comments below.
+import { minifyHtml } from 'vite-plugin-html';
 
 // @ts-check
 export default /** @type {import('astro').AstroUserConfig} */ ({
@@ -12,5 +13,8 @@ export default /** @type {import('astro').AstroUserConfig} */ ({
   // renderers: [],
   buildOptions: {
     site: 'https://jeopardify.netlify.app',
+  },
+  vite: {
+    plugins: [minifyHtml()],
   },
 });
