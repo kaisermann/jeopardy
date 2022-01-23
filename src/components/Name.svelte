@@ -9,6 +9,8 @@
 
 <div class="name">
   <input bind:this={input} bind:value={name} on:focus={handleFocus} />
+  <div class="shine -name-top" />
+  <div class="shine -name-bottom" />
 </div>
 
 <style>

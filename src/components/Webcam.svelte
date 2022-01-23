@@ -179,6 +179,10 @@
 
 <!-- eslint-disable-next-line a11y-media-has-caption -->
 <div class="video-wrapper">
+  <div class="shine -video-top-left" />
+  <div class="shine -video-top-right" />
+  <div class="shine -video-bottom-left" />
+  <div class="shine -video-bottom-right" />
   <canvas
     bind:this={canvas}
     class:ready={isDisplayingVideo}
@@ -190,11 +194,13 @@
 
 <style>
   .video-wrapper {
+    position: relative;
     box-shadow: 0 0 1px 1px #615c64, 0 0 1px 2px #4b4744, 0 0 1px 5px #cec3b5,
       0 0 0 7px #9c9892;
   }
 
   canvas {
+    position: relative;
     display: block;
     object-fit: cover;
     width: 100%;
