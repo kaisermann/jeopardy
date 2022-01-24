@@ -107,6 +107,7 @@
     background-position: center;
     cursor: url(/public/assets/images/cursor-camera.png) 16 16, default !important;
     transition: filter 0.4s ease;
+    transform: scale(-1, 1);
   }
 
   video.loading {
