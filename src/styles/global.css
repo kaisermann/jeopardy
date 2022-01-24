@@ -33,42 +33,42 @@ main {
 
 .shine.-video-top-left {
   top: -5px;
-  left: 15%;
-  animation: shine 10s 0.2s ease infinite alternate,
-    move-x 10s 0.2s linear infinite alternate-reverse;
+  left: 20%;
+  animation: shine 5s 0.2s ease infinite alternate,
+    move-x 8s 0.2s linear infinite alternate-reverse;
 }
 
 .shine.-video-top-right {
   top: -5px;
-  right: calc(15% + 75px);
-  animation: shine 10s 0.5s ease infinite alternate,
-    move-x 10s 0.5s linear infinite alternate-reverse;
+  right: 20%;
+  animation: shine 5s 0.5s ease infinite alternate,
+    move-x 8s 0.5s linear infinite alternate-reverse;
 }
 .shine.-video-bottom-left {
   bottom: -5px;
-  left: 5%;
-  animation: shine 10s 0.4s ease infinite alternate,
-    move-x 10s 0.4s linear infinite alternate-reverse;
+  left: 15%;
+  animation: shine 5s 0.4s ease infinite alternate,
+    move-x 8s 0.4s linear infinite alternate-reverse;
 }
 
 .shine.-video-bottom-right {
   bottom: -5px;
-  right: calc(25% + 75px);
-  animation: shine 10s 0.3s ease infinite alternate,
-    move-x 10s 0.3s linear infinite alternate-reverse;
+  right: 10%;
+  animation: shine 5s 0.3s ease infinite alternate,
+    move-x 8s 0.3s linear infinite alternate-reverse;
 }
 
 .shine.-name-top {
   top: 0px;
   left: 15%;
-  animation: shine 10s 0.25s ease infinite alternate,
-    move-x 10s 0.25s linear infinite alternate-reverse;
+  animation: shine 5s 0.25s ease infinite alternate,
+    move-x 8s 0.25s linear infinite alternate-reverse;
 }
 .shine.-name-bottom {
   bottom: 0px;
   right: 40%;
-  animation: shine 10s 0.25s ease infinite alternate,
-    move-x 10s 0.25s linear infinite alternate;
+  animation: shine 5s 0.25s ease infinite alternate,
+    move-x 8s 0.25s linear infinite alternate;
 }
 
 @keyframes shine {
@@ -76,15 +76,15 @@ main {
     opacity: 0.2;
   }
   100% {
-    opacity: 0.8;
+    opacity: 0.9;
   }
 }
 
 @keyframes move-x {
   0% {
-    transform: translateX(0);
+    transform: translateX(-100%);
   }
   100% {
-    transform: translateX(150px);
+    transform: translateX(100%);
   }
 }
